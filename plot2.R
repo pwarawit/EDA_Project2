@@ -1,12 +1,12 @@
-# Plot1.R
-# This script is part of the Exploratory Data Analysis - Project 2 - plot1
+# Plot2.R
+# This script is part of the Exploratory Data Analysis - Project 2 - plot2
 # Written by PanaEk Warawit on July 22, 2014
-# Q1 - Have total emissions from PM2.5 decreased in the United States from 1999 to 2008? 
-#   Using the base plotting system, make a plot showing the total PM2.5 emission 
-#   from all sources for each of the years 1999, 2002, 2005, and 2008.
+# Q2. Have total emissions from PM2.5 decreased in the Baltimore City, 
+#   Maryland (fips == "24510") from 1999 to 2008? 
+#   Use the base plotting system to make a plot answering this question.
 
-plot1 <- function(){
-
+plot2 <- function(){
+    
     zipfile <- "NEI_data.zip"
     fileurl <- "http://d396qusza40orc.cloudfront.net/exdata%2Fdata%2FNEI_data.zip"
     sccfile <- "Source_Classification_Code.rds"
@@ -30,14 +30,17 @@ plot1 <- function(){
     pm25 <- readRDS(pm25file)
     scc <- readRDS(sccfile)
     
+    # Subsetting only Baltimore data
+    baltimore <- pm25[pm25$fips=="24510",]
+    
     # Aggregate data 
-    total_pm25 <- aggregate(pm25$Emissions, by=list(pm25$year), FUN="sum")
+    total_pm25 <- aggregate(baltimore$Emissions, by=list(baltimore$year), FUN="sum")
     names(total_pm25) <- c("year","pm25")
     
     # Plot 
-    png(filename = "plot1.png", width = 480, height = 480, bg="transparent")
+    png(filename = "plot2.png", width = 480, height = 480, bg="transparent")
     plot(total_pm25$pm25 ~ total_pm25$year, type="l",
-         main="Total PM2.5 emissions in the United States",
+         main="Total PM2.5 emissions in Baltimore, Maryland",
          xlab="Year",
          ylab="PM2.5 Emission (tons)",
          col="red")
